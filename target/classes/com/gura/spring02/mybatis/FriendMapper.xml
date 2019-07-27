@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="friend">
+	<insert id="insert"
+		parameterType="com.gura.spring02.friend.dto.FriendDto">
+		INSERT INTO friend
+		(num, name, addr)
+		VALUES(friend_seq.NEXTVAL, #{name}, #{addr}) <!-- #{Dto의 필드명} --> 
+		<!-- '${변수값}'는 sql을 동적으로 만든다 
+		실행하기전에 값을 넣어주어 sql문을 미리완성한다 -->
+	</insert>
+	
+	<update id="update"
+		parameterType="com.gura.spring02.friend.dto.FriendDto">
+		UPDATE friend
+		SET name=#{name}, addr=#{addr}
+		WHERE num=#{num}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM friend
+		WHERE num=#{num} 
+	</delete>
+		<!-- string이나 int 한 개만 전달되었을 때 하나만 바인딩되었을 때
+		#{아무거나} 아무거나 써도 됨 -->
+		
+	<!-- select 메소드 사용 시 갖고 올 정보 row가 1개인지 row가 여러개인지에 따라
+	selectOne이냐 selectList냐로 나뉜다 -->
+	<select id="getData" parameterType="int"
+	resultType="com.gura.spring02.friend.dto.FriendDto">
+		SELECT num,name,addr
+		FROM friend
+		WHERE num=#{num}
+		<!-- SELECT가 된 로우를 FriendDto 에 담겟다
+		SELECT된 컬럼명 num,name,addr과 FriendDto의 필드명 같게 해줘야
+		자동 포장해줌 -->
+	</select>
+	
+	<select id="getList" resultType="com.gura.spring02.friend.dto.FriendDto">
+		SELECT num, name, addr
+		FROM friend
+		ORDER BY num ASC
+	</select>
+</mapper>
